@@ -45,7 +45,7 @@ When you run the pipeline with the example data provided you should see:
 
 -  2,025 records were read (two of the  input files have 1000 records each and one of input files has only 25 records)
 
-- 2025 records were written to the output dir, with all String fields lower cased and trimmed.
+- 2,025 records were written to the output dir, with all String fields lower cased and trimmed.
 
 - 3 records were written to the summary output dir, with data that looks like this for each input record:
 
@@ -70,9 +70,11 @@ When you run the pipeline with the example data provided you should see:
 
 <img src="images/mapper.png" alt="mapper" width="500"/>
 
-- The <code>Get Num Records per File</code> stage is a [Jython Evaluator](https://docs.streamsets.com/portal/platform-datacollector/latest/datacollector/UserGuide/Processors/Jython.html#concept_a1h_lkf_lr) that determines how may records are in each input files, and then sets these record attributes <code>is_first_record_in_file</code> and <code>is_last_record_in_file</code>
+- The <code>Get Num Records per File</code> stage is a [Jython Evaluator](https://docs.streamsets.com/portal/platform-datacollector/latest/datacollector/UserGuide/Processors/Jython.html#concept_a1h_lkf_lr) that determines how may records are in each input files, and also sets these record attributes: <code>is_first_record_in_file</code> and <code>is_last_record_in_file</code>
 
 - The <code>Create File Summary</code> stage is another Jython Evaluator that aggregates values for each record, and on the last record for each file it creates and writes a file summary record.
+
+See the Jython stages' scripts for details.
 
 
 
