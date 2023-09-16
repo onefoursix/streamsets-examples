@@ -1,7 +1,7 @@
 ## StreamSets Example - SDC - Aggregations-Per-Input-File
 This project provides an example of how to perform aggregations on input data on a per-file basis using [Data Collector](https://streamsets.com/products/data-collector-engine/) (SDC). 
 
-Typically, one would perform aggregation using [Transformer for Spark](https://streamsets.com/products/transformer-etl-engine/) or [Transformer for Snowflake](https://streamsets.com/products/transformer-snowflake/), but if one wants to compute aggregations using SDC, the technique described can be used in SDC.
+Typically, one would perform aggregation using [Transformer for Spark](https://streamsets.com/products/transformer-etl-engine/) or [Transformer for Snowflake](https://streamsets.com/products/transformer-snowflake/), but if one wants to compute aggregations using SDC, the technique described can be used in SDC without blowing up memory.
 
 Tested in [StreamSets Platform](https://streamsets.com/products/) using SDC v5.6.0
 
@@ -9,7 +9,7 @@ Tested in [StreamSets Platform](https://streamsets.com/products/) using SDC v5.6
 
 It is easy enough to use the "file" record attribute to detect when records from a given file are being read, and to detect when the file attribute has changed. However, this risks missing when the last record of the last file has been read, as there may not be subsequent records in the pipeline to trigger the aggregate calculations for the last file.
 
-This example uses a Jython processor to count the number of lines of each file when processing the first record of each file, which allows the pipeline to know when it is processing the last record for each file, without relying on subsequent records.  Records for any given file can be spread across batches, and the pipeline correctly tracks the state across batches
+This example uses a Jython processor to count the number of lines of each file when processing the first record of each file, which allows the pipeline to know when it is processing the last record for each file, without relying on subsequent records.  Records for any given file can be spread across batches, and the pipeline correctly accumulates the metrics per file across batches
 
 ### The example pipeline
 
@@ -70,7 +70,7 @@ When you run the pipeline with the example data provided you should see:
 
 <img src="images/mapper.png" alt="mapper" width="500"/>
 
-- The <code>Get Number of Records in File</code> stage is a [Jython Evaluator](https://docs.streamsets.com/portal/platform-datacollector/latest/datacollector/UserGuide/Processors/Jython.html#concept_a1h_lkf_lr) that determines how may records are in each input files, and then sets these record attributes <code>is_first_record_in_file</code> and <code>is_last_record_in_file</code>
+- The <code>Get Num Records per File</code> stage is a [Jython Evaluator](https://docs.streamsets.com/portal/platform-datacollector/latest/datacollector/UserGuide/Processors/Jython.html#concept_a1h_lkf_lr) that determines how may records are in each input files, and then sets these record attributes <code>is_first_record_in_file</code> and <code>is_last_record_in_file</code>
 
 - The <code>Create File Summary</code> stage is another Jython Evaluator that aggregates values for each record, and on the last record for each file it creates and writes a file summary record.
 
