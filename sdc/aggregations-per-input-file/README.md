@@ -74,7 +74,7 @@ When you run the pipeline with the example data provided you should see:
 
 - The <code>Create File Summary</code> stage is another Jython Evaluator that aggregates values for each record, and on the last record for each file it creates and writes a file summary record.
 
-See the Jython stages' scripts for details.
+See the Jython stages' scripts [here](jython/) for details. 
 
 
 

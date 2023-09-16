@@ -1,0 +1,80 @@
+# This stage computes the following aggregations per input file
+# - the sum of the fare_amount field
+# - the average of the trip_distance field
+# - the sum of the total_amount field grouped by the payment_type field
+
+# Imports
+from datetime import datetime
+import json  
+
+# For each record in the batch
+for record in sdc.records:
+  
+  try:
+    # If this is the first record for a given file...
+    if record.attributes['is_first_record_in_file'] == 'true':
+    
+      # Reset the record count
+      sdc.state['record_count'] = 0
+      
+      # Reset the aggregations
+      sdc.state['sum_fare_amount'] = 0
+      sdc.state['total_trip_distance'] = 0
+      sdc.state['total_amount_group_by_payment_type'] = {}
+    
+    # Bump the record count
+    sdc.state['record_count'] += 1
+    
+    # Add the fare_amount to the running sum
+    sdc.state['sum_fare_amount'] += record.value['fare_amount']
+    
+    # Add the distance to the total_distance that we'll use to compute the average
+    sdc.state['total_trip_distance'] += record.value['trip_distance']
+    
+    # Get values to compute total_amount grouped by payment type
+    key = 'payment_type_' + str(record.value['payment_type'])
+    value = record.value['total_amount']
+    
+    # If we have not seen this payment type before...
+    if key not in sdc.state['total_amount_group_by_payment_type'].keys():
+      
+      # ... add the payment type as a key and the total_amount as the initial value
+      sdc.state['total_amount_group_by_payment_type'][key] = value
+     
+    # ... or if we have seen this key before, add the total_amount to the key's value
+    else: 
+       sdc.state['total_amount_group_by_payment_type'][key] += value
+    
+    # If we are on the last record of the file, compute aggregations and emit a record
+    if record.attributes['is_last_record_in_file'] == 'true':
+    
+      # Create a summary record
+      summary_record =  sdc.createRecord(record.sourceId + ' summary')
+      summary_record.value = sdc.createMap(True)
+      summary_record.value['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+      # Set the file name
+      summary_record.value['file_name'] = record.attributes['file']
+    
+      # Set the number of records in the file
+      summary_record.value['record_count'] = sdc.state['record_count']
+    
+      # Set the sum of the fare_amount name
+      summary_record.value['sum_fare_amount'] = round(sdc.state['sum_fare_amount'], 2)
+    
+      # Compute and set the average distance
+      avg_distance = round(sdc.state['total_trip_distance'] / sdc.state['record_count'], 2)
+      summary_record.value['avg_trip_distance'] = avg_distance
+    
+      # Trim the group-by values to 2 decimal places
+      for key in sdc.state['total_amount_group_by_payment_type'].keys():
+        sdc.state['total_amount_group_by_payment_type'][key]= round(sdc.state['total_amount_group_by_payment_type'][key], 2)
+       
+      # Set the total_amount_group_by_payment_type data
+      summary_record.value['total_amount_group_by_payment_type'] = sdc.state['total_amount_group_by_payment_type']
+       
+      # Emit the record
+      sdc.output.write(summary_record)
+    
+  except Exception as e:
+    sdc.error.write(record, str(e))

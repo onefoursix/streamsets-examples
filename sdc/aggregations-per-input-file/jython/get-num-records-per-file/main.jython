@@ -1,0 +1,48 @@
+# Method to get the number of records for a file
+def get_num_records_in_file(file_name):
+  num_records = 0
+  with open(file_name, 'r') as file:
+    for line in file:
+      if len(line.strip()) > 0:
+        num_records += 1
+  return num_records
+
+# Main record processing loop
+for record in sdc.records:
+  try:
+    
+    # Get the file name for the record
+    file_name = record.attributes['file']
+    
+    # If this is the first time we are seeing this file...
+    if sdc.state['current_file'] != file_name:
+      
+      # set it as the current file
+      sdc.state['current_file'] = file_name
+      
+      # capture the number of records in the file
+      sdc.state['num_records_in_file'][file_name] = get_num_records_in_file(file_name)
+      
+      # set the current record number to 1
+      sdc.state['current_record_number'] = 1
+      
+      # Mark the record as the first record in the file
+      record.attributes['is_first_record_in_file'] = 'true'
+      
+    else: # if we have seen this file before
+      
+      # bump the record counter for the file
+      sdc.state['current_record_number'] += 1
+      
+      record.attributes['is_first_record_in_file'] = 'false'
+      
+    # See if we are on the last record in the file  
+    if sdc.state['current_record_number'] == sdc.state['num_records_in_file'][file_name]:
+      record.attributes['is_last_record_in_file'] = 'true'
+    else:
+      record.attributes['is_last_record_in_file'] = 'false'
+      
+    sdc.output.write(record)
+
+  except Exception as e:
+    sdc.error.write(record, str(e))

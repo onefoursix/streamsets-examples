@@ -1,0 +1,12 @@
+# A global counter to keep track of how many 
+# records we've handled across batches for a given file
+sdc.state['record_count'] = 0
+
+# Sum of fare_amount field
+sdc.state['sum_fare_amount'] = 0
+
+# We'll use this to compute average of distance field
+sdc.state['total_trip_distance'] = 0
+
+# Sum of total_amount grouped by payment_type
+sdc.state['total_amount_group_by_payment_type'] = {}
