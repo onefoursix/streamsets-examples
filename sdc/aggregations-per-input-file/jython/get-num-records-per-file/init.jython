@@ -1,3 +1,3 @@
 sdc.state['current_file'] = None
-sdc.state['num_records_in_file'] = {}
+sdc.state['num_records_in_current_file'] = 0
 sdc.state['current_record_number'] = 0

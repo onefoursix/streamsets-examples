@@ -21,7 +21,7 @@ for record in sdc.records:
       sdc.state['current_file'] = file_name
       
       # capture the number of records in the file
-      sdc.state['num_records_in_file'][file_name] = get_num_records_in_file(file_name)
+      sdc.state['num_records_in_current_file'] = get_num_records_in_file(file_name)
       
       # set the current record number to 1
       sdc.state['current_record_number'] = 1
@@ -37,7 +37,7 @@ for record in sdc.records:
       record.attributes['is_first_record_in_file'] = 'false'
       
     # See if we are on the last record in the file  
-    if sdc.state['current_record_number'] == sdc.state['num_records_in_file'][file_name]:
+    if sdc.state['current_record_number'] == sdc.state['num_records_in_current_file']:
       record.attributes['is_last_record_in_file'] = 'true'
     else:
       record.attributes['is_last_record_in_file'] = 'false'
