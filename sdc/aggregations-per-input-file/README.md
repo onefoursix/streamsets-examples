@@ -22,6 +22,8 @@ The pipeline looks like this:
 The pipeline reads a set of JSON files, lower cases and trims String fields, and writes records to an output directory.  The pipeline also writes one summary record per input file that includes these summary aggregations per input file:
 
  - the sum of the <code>fare_amount</code> field
+ - the min of the fare_amount field
+ - the max of the fare_amount field
  - the average of the <code>trip_distance</code> field
  - the sum of the <code>total_amount</code> field grouped by the <code>payment_type</code> field
 
@@ -51,16 +53,18 @@ When you run the pipeline with the example data provided you should see:
 
 ```
 {
-  "timestamp": "2023-09-16 15:40:09",
-  "file_name": "/Users/mark/data/json/2.json",
+  "timestamp": "2023-09-19 11:39:38",
+  "file_name": "/Users/mark/data/json/1.json",
   "record_count": 1000,
-  "sum_fare_amount": 18894.55,
-  "avg_trip_distance": 3.32,
+  "sum_fare_amount": 15952.5,
+  "min_fare_amount": 3.4,
+  "max_fare_amount": 334.1,
+  "avg_trip_distance": 2.78,
   "total_amount_group_by_payment_type": {
-    "payment_type_4": 29,
-    "payment_type_2": 4014.85,
-    "payment_type_3": 64.33,
-    "payment_type_1": 25588.84
+    "payment_type_4": 0,
+    "payment_type_2": 3043.05,
+    "payment_type_3": 66.8,
+    "payment_type_1": 20103.21
   }
 }
 ```

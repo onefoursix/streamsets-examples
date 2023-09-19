@@ -5,6 +5,12 @@ sdc.state['record_count'] = 0
 # Sum of fare_amount field
 sdc.state['sum_fare_amount'] = 0
 
+# Min of fare_amount
+sdc.state['min_fare_amount'] = None
+
+# Max of fare_amount
+sdc.state['max_fare_amount'] = None
+
 # We'll use this to compute average of distance field
 sdc.state['total_trip_distance'] = 0
 

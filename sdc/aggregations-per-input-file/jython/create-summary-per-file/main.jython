@@ -1,5 +1,7 @@
 # This stage computes the following aggregations per input file
 # - the sum of the fare_amount field
+# - the min of the fare_amount field
+# - the max of the fare_amount field
 # - the average of the trip_distance field
 # - the sum of the total_amount field grouped by the payment_type field
 
@@ -21,6 +23,8 @@ for record in sdc.records:
       sdc.state['sum_fare_amount'] = 0
       sdc.state['total_trip_distance'] = 0
       sdc.state['total_amount_group_by_payment_type'] = {}
+      sdc.state['min_fare_amount'] = None
+      sdc.state['max_fare_amount'] = None
     
     # Bump the record count
     sdc.state['record_count'] += 1
@@ -31,6 +35,14 @@ for record in sdc.records:
     # Add the distance to the total_distance that we'll use to compute the average
     sdc.state['total_trip_distance'] += record.value['trip_distance']
     
+    # Capture min fare_amount
+    if sdc.state['min_fare_amount'] == None or sdc.state['min_fare_amount'] > record.value['fare_amount']:
+      sdc.state['min_fare_amount'] = record.value['fare_amount']
+      
+    # Capture max fare_amount
+    if sdc.state['max_fare_amount'] == None or sdc.state['max_fare_amount'] < record.value['fare_amount']:
+      sdc.state['max_fare_amount'] = record.value['fare_amount']
+      
     # Get values to compute total_amount grouped by payment type
     key = 'payment_type_' + str(record.value['payment_type'])
     value = record.value['total_amount']
@@ -59,8 +71,14 @@ for record in sdc.records:
       # Set the number of records in the file
       summary_record.value['record_count'] = sdc.state['record_count']
     
-      # Set the sum of the fare_amount name
+      # Set the sum of the fare_amount
       summary_record.value['sum_fare_amount'] = round(sdc.state['sum_fare_amount'], 2)
+      
+      # Set the min fare_amount
+      summary_record.value['min_fare_amount'] = sdc.state['min_fare_amount']
+      
+      # Set the max fare_amount
+      summary_record.value['max_fare_amount'] = sdc.state['max_fare_amount']
     
       # Compute and set the average distance
       avg_distance = round(sdc.state['total_trip_distance'] / sdc.state['record_count'], 2)
