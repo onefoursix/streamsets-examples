@@ -22,7 +22,7 @@ It is assumed that all records within each JSON file adhere to the same schema, 
 
 ### The challenge
 
-SDC's [Local FS](https://docs.streamsets.com/portal/platform-datacollector/5.6.x/datacollector/UserGuide/Destinations/LocalFS.html#concept_zvc_bv5_1r) destination allows users to specify prefixes and suffixes for generated files, but not explicit file names.  One can hook the [file-closed event](https://docs.streamsets.com/portal/platform-datacollector/5.6.x/datacollector/UserGuide/Destinations/LocalFS.html#concept_tyc_scc_rx) to trigger a [Shell Executor](https://docs.streamsets.com/portal/platform-datacollector/latest/datacollector/UserGuide/Executors/Shell.html#concept_jsr_zpw_tz) to rename files once closed, but the file-closed event does not include the source file name, so the challenge is: how can one access the source file name when renaming the generated file? 
+SDC's [Local FS](https://docs.streamsets.com/portal/platform-datacollector/5.6.x/datacollector/UserGuide/Destinations/LocalFS.html#concept_zvc_bv5_1r) destination allows users to specify prefixes and suffixes for generated files, but not explicit file names.  One can hook the [file-closed event](https://docs.streamsets.com/portal/platform-datacollector/5.6.x/datacollector/UserGuide/Destinations/LocalFS.html#concept_tyc_scc_rx) to trigger a [Shell Executor](https://docs.streamsets.com/portal/platform-datacollector/latest/datacollector/UserGuide/Executors/Shell.html#concept_jsr_zpw_tz) to rename files once closed, but the file-closed event does not include the source file name, so the challenge is: how can one access source file names when renaming generated files? 
 
 ### The example pipeline
 
