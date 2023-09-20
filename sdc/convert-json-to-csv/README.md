@@ -71,7 +71,7 @@ CSV files requires records to be in List-Map format with field ordering;  howeve
 for record in sdc.records:
   try:
   
-  # Store the record value Map
+    # Store the record value Map
     map = record.value
     
     # Create a List-Map
