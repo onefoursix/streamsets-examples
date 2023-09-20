@@ -66,7 +66,24 @@ file_3.csv with 25 records
 
 ### Implementation details
 
-The trick used in this pipeline is to use source file names as temporary directory names for the output files. The output files' paths can then be accessed by the Shell Executor to recover the name of the source files in order to rename the target files.
+CSV files requires records to be in List-Map format with field ordering;  however, JSON records are in Map format as JSON records are un-ordered sets of name/value pairs. The pipeline uses a simple Jython script to convert Map records to a List-Map records:
+```
+for record in sdc.records:
+  try:
+    map = record.value
+    record.value = sdc.createMap(True)
+    for key in  map.keys():
+      record.value[key] = map[key]
+    sdc.output.write(record)
+  except Exception as e:
+    sdc.error.write(record, str(e))
+```
+
+We can view the results in Preview mode:
+
+<img src="images/map-to-list-map.png" alt="map-to-list-map" width="500"/>
+
+The pipeline uses source file names as temporary directory names for output files as a way to make source file names available to the Shell Executor. 
 
 See the pipeline's Jython stages' scripts and the Shell Executor script for details. 
 
