@@ -81,7 +81,7 @@ for record in sdc.records:
 
 We can view the results in Preview mode:
 
-<img src="images/map-to-list-map.png" alt="map-to-list-map" width="500"/>
+<img src="images/map-to-list-map.png" alt="map-to-list-map" width="700"/>
 
 The pipeline uses source file names as temporary directory names for output files as a way to make source file names available to the Shell Executor. 
 
