@@ -1,5 +1,5 @@
 ## StreamSets Example - SDC - Convert JSON to CSV
-This project provides an example of how to convert JSON files to CSV files using [Data Collector](https://streamsets.com/products/data-collector-engine/) (SDC), while preserving  fils names and record-to-file mapping.
+This project provides an example of how to convert JSON files to CSV files using [Data Collector](https://streamsets.com/products/data-collector-engine/) (SDC), while preserving  file names and record-to-file mapping.
 
 For example, given input files like this:
 
