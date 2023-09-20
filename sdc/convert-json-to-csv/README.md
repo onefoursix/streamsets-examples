@@ -66,7 +66,7 @@ file_3.csv with 25 records
 
 ### Implementation details
 
-The trick used in this pipeline is to use source file names as temporary directory names for the output files. The output filess paths can then be accessed by the Shell Executor to recover the name of the source files in order to rename the target files.
+The trick used in this pipeline is to use source file names as temporary directory names for the output files. The output files' paths can then be accessed by the Shell Executor to recover the name of the source files in order to rename the target files.
 
 See the pipeline's Jython stages' scripts and the Shell Executor script for details. 
 
