@@ -26,7 +26,7 @@ SDC's [Local FS](https://docs.streamsets.com/portal/platform-datacollector/5.6.x
 
 ### The example pipeline
 
-The example pipeline that accomplishes the goal looks like this:
+The example pipeline that accomplishes this goal looks like this:
 
 <img src="images/pipeline.png" alt="pipeline" width="700"/>
 
