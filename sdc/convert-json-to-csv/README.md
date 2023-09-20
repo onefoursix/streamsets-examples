@@ -70,10 +70,17 @@ CSV files requires records to be in List-Map format with field ordering;  howeve
 ```
 for record in sdc.records:
   try:
+  
+  # Store the record value Map
     map = record.value
+    
+    # Create a List-Map
     record.value = sdc.createMap(True)
-    for key in  map.keys():
+    
+    # Copy the key-value pairs from the Map to the List-Map
+    for key in map.keys():
       record.value[key] = map[key]
+      
     sdc.output.write(record)
   except Exception as e:
     sdc.error.write(record, str(e))
