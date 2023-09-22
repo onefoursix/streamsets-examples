@@ -34,6 +34,8 @@ The pipeline reads a set of JSON files, lower cases and trims String fields, and
 
 You can download the pipeline archive from [here](pipelines/) and import it into your StreamSets environment as described [here](https://docs.streamsets.com/portal/platform-controlhub/controlhub/UserGuide/ExportImport/Importing.html#task_qr5_szm_qx)
 
+There are pipeline versions for both JSON and CSV input files. The docs here refer to the JSON version.
+
 ### Set pipeline parameters
 
 The pipeline requires several parameters to be set. Here are the settings from my environment:
